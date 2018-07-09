@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -e
+
+lb config noauto \
+	--mode debian \
+	--architectures amd64 \
+	--distribution stretch \
+	--apt-recommends false \
+	--binary-images iso-hybrid \
+	--system live \
+	--debian-installer live \
+	--debian-installer-gui true \
+	--archive-areas "main contrib non-free" \
+	"${@}"
+
+mkdir -p ./config/includes.chroot/opt/ybkernel
+cp ../custom/chroot/*.deb ./config/includes.chroot/opt/ybkernel
+cp ../custom/hooks/0100-install-custom-kernel.hook.chroot ./config/hooks/live
+# Consider changing next line, create proper binary directory in config/hooks
+cp ../custom/hooks/grubedit.hook.binary ./config/hooks/normal
+cp ../custom/package-lists/stockpruned.list.chroot ./config/package-lists
+

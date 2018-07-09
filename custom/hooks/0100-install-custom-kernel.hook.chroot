@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+export LANG=C.UTF-8
+
+dpkg -i /opt/ybkernel/*.deb
+
+apt-get -y purge linux*4.9*
+
+dpkg --configure -a
+
+apt-get autoremove
+apt-get autoclean
+apt-get clean
+
